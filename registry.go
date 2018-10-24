@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"runtime"
 
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/sys/windows/registry"
 )
 
-func main() {
+func getMachineGUID() string {
 	var key string
 	if runtime.GOARCH == "amd64" {
-		fmt.Printf("Found 64bit OS...\n")
+		log.Debug("Found 64bit OS...")
 		key = `SOFTWARE\Microsoft\Cryptography`
 	} else if runtime.GOARCH == "386" {
-		fmt.Printf("Found 32bit OS...")
+		log.Debug("Found 32bit OS...")
 		key = `SOFTWARE\WOW6432Node\Microsoft\Cryptography`
 	}
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE, key, registry.QUERY_VALUE)
@@ -27,5 +27,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Windows system GUID is %q\n", s)
+	return s
+}
+
+func main() {
+	// Print the Machine GUID from the Windows Registry
+	fmt.Printf(getMachineGUID())
 }
