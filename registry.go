@@ -30,6 +30,11 @@ func getMachineGUID() string {
 	return s
 }
 
+func init() {
+	// Change the logging level.
+	log.SetLevel(log.DebugLevel)
+}
+
 func main() {
 	// Print the Machine GUID from the Windows Registry
 	fmt.Printf(getMachineGUID())
